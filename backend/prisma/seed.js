@@ -85,8 +85,8 @@ async function main() {
         stock: 8 + (i % 9),
         categoryId: category.id,
         limitedEdition,
-        sizes,
-        colors: [colors[i % colors.length], colors[(i + 2) % colors.length]],
+        sizes: sizes.join(","),
+        colors: [colors[i % colors.length], colors[(i + 2) % colors.length]].join(","),
         collectionId: collection.id,
         images: {
           create: [

@@ -6,6 +6,25 @@ const { authRequired, adminRequired } = require("../middleware/auth");
 
 const router = express.Router();
 
+function toCsv(values) {
+  return (values || []).map((item) => item.trim()).filter(Boolean).join(",");
+}
+
+function fromCsv(value) {
+  if (!value) {
+    return [];
+  }
+  return value.split(",").map((item) => item.trim()).filter(Boolean);
+}
+
+function normalizeProduct(product) {
+  return {
+    ...product,
+    sizes: fromCsv(product.sizes),
+    colors: fromCsv(product.colors)
+  };
+}
+
 router.get("/", async (req, res, next) => {
   try {
     const {
@@ -37,8 +56,8 @@ router.get("/", async (req, res, next) => {
         category ? { category: { name: { equals: category, mode: "insensitive" } } } : {},
         collection ? { collection: { slug: collection } } : {},
         outfit ? { outfits: { some: { outfit: { slug: outfit } } } } : {},
-        size ? { sizes: { has: size } } : {},
-        color ? { colors: { has: color } } : {},
+        size ? { sizes: { contains: size } } : {},
+        color ? { colors: { contains: color } } : {},
         limited === "true" ? { limitedEdition: true } : {},
         availability === "in_stock" ? { stock: { gt: 0 } } : {},
         availability === "out_of_stock" ? { stock: { lte: 0 } } : {},
@@ -74,7 +93,7 @@ router.get("/", async (req, res, next) => {
       prisma.product.count({ where })
     ]);
 
-    return res.json({ items, total, page: currentPage, pageSize: take });
+    return res.json({ items: items.map(normalizeProduct), total, page: currentPage, pageSize: take });
   } catch (error) {
     return next(error);
   }
@@ -111,7 +130,21 @@ router.get("/:id", async (req, res, next) => {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    return res.json(product);
+    const normalized = {
+      ...normalizeProduct(product),
+      outfits: product.outfits.map((entry) => ({
+        ...entry,
+        outfit: {
+          ...entry.outfit,
+          products: entry.outfit.products.map((outfitItem) => ({
+            ...outfitItem,
+            product: normalizeProduct(outfitItem.product)
+          }))
+        }
+      }))
+    };
+
+    return res.json(normalized);
   } catch (error) {
     return next(error);
   }
@@ -145,8 +178,8 @@ router.post("/", authRequired, adminRequired, async (req, res, next) => {
         categoryId: payload.categoryId,
         collectionId: payload.collectionId,
         limitedEdition: payload.limitedEdition ?? false,
-        sizes: payload.sizes,
-        colors: payload.colors,
+        sizes: toCsv(payload.sizes),
+        colors: toCsv(payload.colors),
         images: { create: payload.imageUrls.map((url) => ({ url })) },
         outfits: {
           create: payload.outfitIds.map((outfitId) => ({ outfitId }))
@@ -155,7 +188,7 @@ router.post("/", authRequired, adminRequired, async (req, res, next) => {
       include: { images: true, outfits: true }
     });
 
-    return res.status(201).json(product);
+    return res.status(201).json(normalizeProduct(product));
   } catch (error) {
     return next(error);
   }
@@ -190,8 +223,8 @@ router.put("/:id", authRequired, adminRequired, async (req, res, next) => {
         ...(payload.categoryId ? { categoryId: payload.categoryId } : {}),
         ...(payload.collectionId !== undefined ? { collectionId: payload.collectionId } : {}),
         ...(payload.limitedEdition !== undefined ? { limitedEdition: payload.limitedEdition } : {}),
-        ...(payload.sizes ? { sizes: payload.sizes } : {}),
-        ...(payload.colors ? { colors: payload.colors } : {})
+        ...(payload.sizes ? { sizes: toCsv(payload.sizes) } : {}),
+        ...(payload.colors ? { colors: toCsv(payload.colors) } : {})
       }
     });
 
@@ -219,7 +252,7 @@ router.put("/:id", authRequired, adminRequired, async (req, res, next) => {
       }
     });
 
-    return res.json(updated);
+    return res.json(normalizeProduct(updated));
   } catch (error) {
     return next(error);
   }

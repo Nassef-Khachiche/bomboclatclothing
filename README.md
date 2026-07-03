@@ -5,7 +5,7 @@ Modern full-stack clothing e-commerce platform with a minimalist luxury storefro
 ## Tech Stack
 
 - Frontend: React + Vite + TailwindCSS + Zustand + Lucide
-- Backend: Node.js + Express + Prisma ORM + PostgreSQL
+- Backend: Node.js + Express + Prisma ORM + MySQL
 - Auth: JWT (admin protected routes)
 - API: REST
 - Uploads: Local storage via Multer
@@ -14,7 +14,7 @@ Modern full-stack clothing e-commerce platform with a minimalist luxury storefro
 
 - `frontend/` React storefront + admin UI
 - `backend/` Express API + Prisma schema + seed + migrations
-- `docker-compose.yml` PostgreSQL + app services
+- `docker-compose.yml` MySQL + app services
 
 ## Features
 
@@ -60,13 +60,13 @@ npm install -w backend
 - Copy `backend/.env.example` to `backend/.env`
 - Copy `frontend/.env.example` to `frontend/.env`
 
-3. Start PostgreSQL (choose one):
+3. Start MySQL (choose one):
 
-- Local PostgreSQL instance
+- Local MySQL instance
 - Or Docker:
 
 ```bash
-docker compose up -d postgres
+docker compose up -d mysql
 ```
 
 4. Run Prisma migrations + seed:
