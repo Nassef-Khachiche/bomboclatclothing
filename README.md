@@ -153,13 +153,48 @@ docker compose up -d mysql
 - Protected admin routes
 - Input validation with Zod
 
-## Docker (Optional)
+## Docker (Local Container Setup)
+
+Before the first Docker run, copy the root env example:
+
+```bash
+cp .env.example .env
+```
 
 ```bash
 docker compose up --build
 ```
 
-Then run Prisma commands inside backend container or locally.
+Services after startup:
+
+- Frontend: http://localhost:8080
+- Backend API: http://localhost:5000/api
+
+Initialize Prisma in the running backend container:
+
+```bash
+docker compose exec backend npx prisma migrate deploy
+docker compose exec backend npm run prisma:seed
+```
+
+Notes:
+
+- The frontend container is built as static files and served by Nginx.
+- The backend uploads folder is persisted with a bind mount at `backend/uploads`.
+- MySQL data is persisted in the `mysql_data` Docker volume.
+- The root `.env` is used by Docker Compose for container-specific values.
+
+## Plesk VPS Deployment
+
+Full step-by-step instructions are in [docs/PLESK-DEPLOY.md](docs/PLESK-DEPLOY.md).
+
+High-level flow:
+
+1. Create a domain for the storefront and a subdomain for the API.
+2. Upload or clone this repo onto the VPS.
+3. Set `VITE_API_URL` to your API domain before building the frontend container.
+4. Start the stack with Docker Compose inside Plesk or over SSH.
+5. Run Prisma migrations and optional seed inside the backend container.
 
 ## Notes
 
