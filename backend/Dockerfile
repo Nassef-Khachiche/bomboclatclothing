@@ -9,7 +9,7 @@ COPY prisma ./prisma
 RUN npx prisma generate
 
 COPY src ./src
-COPY uploads ./uploads
+RUN mkdir -p uploads
 
 EXPOSE 5000
 
