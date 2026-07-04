@@ -181,3 +181,23 @@ Run:
 ```bash
 docker compose exec backend npx prisma migrate deploy
 ```
+
+### Prisma libssl.so.1.1 engine error
+
+Error example:
+
+`Unable to require ... libquery_engine-linux-musl.so.node` with `libssl.so.1.1: No such file or directory`.
+
+Cause:
+
+- Alpine/musl image and Prisma engine/OpenSSL mismatch.
+
+Fix:
+
+- Use the Debian-based backend image (`node:20-bookworm-slim`) in [backend/Dockerfile](backend/Dockerfile).
+- Rebuild and recreate the backend container:
+
+```bash
+docker compose build --no-cache backend
+docker compose up -d --force-recreate backend
+```
