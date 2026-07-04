@@ -195,9 +195,20 @@ Cause:
 Fix:
 
 - Use the Debian-based backend image (`node:20-bookworm-slim`) in [backend/Dockerfile](backend/Dockerfile).
+- Ensure Prisma generator includes OpenSSL 3 target in [backend/prisma/schema.prisma](backend/prisma/schema.prisma): `binaryTargets = ["native", "debian-openssl-3.0.x"]`.
 - Rebuild and recreate the backend container:
 
 ```bash
 docker compose build --no-cache backend
 docker compose up -d --force-recreate backend
 ```
+
+Optional verification:
+
+```bash
+docker compose run --rm backend sh -lc "ls -1 /app/node_modules/.prisma/client/libquery_engine*"
+```
+
+Expected output includes:
+
+`libquery_engine-debian-openssl-3.0.x.so.node`
