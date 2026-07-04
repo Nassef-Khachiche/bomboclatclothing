@@ -33,7 +33,7 @@ function HomePage() {
         </div>
         <div className="pointer-events-none absolute inset-0 bg-black/35" />
         <div className="absolute inset-0 flex items-end p-8 md:items-center md:p-12">
-          <h1 className="text-4xl uppercase tracking-[0.2em] text-white md:text-7xl">Bomboclat Clothing</h1>
+          <h1 className="text-4xl font-bold uppercase tracking-[0.2em] text-white md:text-7xl">Bomboclat Clothing</h1>
         </div>
       </section>
 

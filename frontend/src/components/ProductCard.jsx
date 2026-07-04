@@ -11,15 +11,16 @@ function ProductCard({ product }) {
           <img
             src={images[0].url}
             alt={product.name}
-            className="absolute inset-0 h-full w-full object-contain transition duration-500 group-hover:scale-[1.03]"
+            className="absolute inset-0 h-full w-full object-contain opacity-100 transition-opacity duration-300 ease-in-out group-hover:opacity-0"
             loading="lazy"
           />
           {images[1]?.url && (
             <img
               src={images[1].url}
               alt={`${product.name} alternate`}
-              className="absolute inset-0 h-full w-full object-contain opacity-0 transition duration-500 group-hover:opacity-100"
-              loading="lazy"
+              className="absolute inset-0 z-10 h-full w-full object-contain opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100"
+              loading="eager"
+              decoding="async"
             />
           )}
         </div>
