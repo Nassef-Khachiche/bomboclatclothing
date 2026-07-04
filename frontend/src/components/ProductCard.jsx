@@ -1,23 +1,30 @@
 import { Link } from "react-router-dom";
-import Button from "./Button";
-import { currency } from "../utils/currency";
+import { getDisplayProductImages } from "../utils/productImages";
 
 function ProductCard({ product }) {
+  const images = getDisplayProductImages(product);
+
   return (
     <article className="group space-y-3">
-      <div className="overflow-hidden bg-zinc-100">
-        <img
-          src={product.images?.[0]?.url}
-          alt={product.name}
-          className="h-80 w-full object-cover transition duration-500 group-hover:scale-105"
-          loading="lazy"
-        />
-      </div>
-      <h3 className="text-sm uppercase tracking-[0.17em]">{product.name}</h3>
-      <p className="text-sm text-zinc-600">{currency(product.price)}</p>
-      <Link to={`/products/${product.slug || product.id}`}>
-        <Button variant="outline" className="w-full">View Product</Button>
+      <Link to={`/products/${product.slug || product.id}`} className="block overflow-hidden bg-white">
+        <div className="relative h-[58vh] min-h-[360px] w-full">
+          <img
+            src={images[0].url}
+            alt={product.name}
+            className="absolute inset-0 h-full w-full object-contain transition duration-500 group-hover:scale-[1.03]"
+            loading="lazy"
+          />
+          {images[1]?.url && (
+            <img
+              src={images[1].url}
+              alt={`${product.name} alternate`}
+              className="absolute inset-0 h-full w-full object-contain opacity-0 transition duration-500 group-hover:opacity-100"
+              loading="lazy"
+            />
+          )}
+        </div>
       </Link>
+      <h3 className="text-center text-[11px] uppercase tracking-[0.22em] text-zinc-700">{product.name}</h3>
     </article>
   );
 }

@@ -26,7 +26,7 @@ function SearchBar() {
         <Search size={16} />
         <input
           className="w-full bg-transparent text-sm outline-none"
-          placeholder="Search products, outfits, categories"
+          placeholder="Search products, categories"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
         />
@@ -36,11 +36,6 @@ function SearchBar() {
           <div className="space-y-2 text-xs uppercase tracking-[0.15em]">
             {results.products?.map((item) => (
               <Link key={`p-${item.id}`} className="block hover:text-zinc-500" to={`/products/${item.slug}`}>
-                {item.name}
-              </Link>
-            ))}
-            {results.outfits?.map((item) => (
-              <Link key={`o-${item.id}`} className="block hover:text-zinc-500" to={`/outfits/${item.slug}`}>
                 {item.name}
               </Link>
             ))}

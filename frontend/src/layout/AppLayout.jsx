@@ -3,7 +3,6 @@ import { Outlet } from "react-router-dom";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import CartDrawer from "../components/CartDrawer";
-import CookieConsent from "../components/CookieConsent";
 import useCartStore from "../store/cartStore";
 
 function AppLayout() {
@@ -17,12 +16,11 @@ function AppLayout() {
   return (
     <div className="min-h-screen bg-white text-black">
       <Navbar onCartOpen={() => setCartOpen(true)} />
-      <main className="mx-auto max-w-7xl px-4 py-8">
+      <main className="w-full px-4 py-8 md:px-6">
         <Outlet />
       </main>
       <Footer />
       <CartDrawer open={cartOpen} setOpen={setCartOpen} />
-      <CookieConsent />
     </div>
   );
 }

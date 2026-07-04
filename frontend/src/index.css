@@ -21,6 +21,10 @@ body {
   font-family: "Manrope", "Segoe UI", sans-serif;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 h1,
 h2,
 h3,
@@ -29,4 +33,29 @@ h5,
 h6,
 .display {
   font-family: "Space Grotesk", "Segoe UI", sans-serif;
+}
+
+a,
+button,
+input,
+select {
+  transition: background-color 220ms ease, color 220ms ease, border-color 220ms ease, opacity 220ms ease, transform 220ms ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .soft-reveal {
+    animation: rise 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .soft-reveal-delay-1 {
+    animation-delay: 80ms;
+  }
+
+  .soft-reveal-delay-2 {
+    animation-delay: 140ms;
+  }
+
+  .soft-reveal-delay-3 {
+    animation-delay: 200ms;
+  }
 }

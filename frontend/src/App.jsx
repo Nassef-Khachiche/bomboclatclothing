@@ -4,8 +4,6 @@ import HomePage from "./pages/HomePage";
 import NewPage from "./pages/NewPage";
 import ProductsPage from "./pages/ProductsPage";
 import ProductDetailsPage from "./pages/ProductDetailsPage";
-import OutfitsPage from "./pages/OutfitsPage";
-import OutfitDetailsPage from "./pages/OutfitDetailsPage";
 import LimitedPage from "./pages/LimitedPage";
 import TrackOrderPage from "./pages/TrackOrderPage";
 import CheckoutPage from "./pages/CheckoutPage";
@@ -20,8 +18,6 @@ function App() {
         <Route path="/new" element={<NewPage />} />
         <Route path="/products" element={<ProductsPage />} />
         <Route path="/products/:id" element={<ProductDetailsPage />} />
-        <Route path="/outfits" element={<OutfitsPage />} />
-        <Route path="/outfits/:id" element={<OutfitDetailsPage />} />
         <Route path="/limited" element={<LimitedPage />} />
         <Route path="/track-order" element={<TrackOrderPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />

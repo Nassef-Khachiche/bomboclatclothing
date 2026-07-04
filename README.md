@@ -88,6 +88,13 @@ npm run dev
 - Frontend: http://localhost:5173
 - Backend: http://localhost:5000
 
+Troubleshooting MySQL container restart/crash after config changes:
+
+```bash
+docker compose down -v
+docker compose up -d mysql
+```
+
 ## Admin Login (Seed)
 
 - Email: `admin@bomboclat.com`

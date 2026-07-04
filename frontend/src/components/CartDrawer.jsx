@@ -2,6 +2,7 @@ import { X } from "lucide-react";
 import { Link } from "react-router-dom";
 import useCartStore from "../store/cartStore";
 import { currency } from "../utils/currency";
+import { getDisplayProductImages } from "../utils/productImages";
 import QuantitySelector from "./QuantitySelector";
 import Button from "./Button";
 
@@ -16,11 +17,11 @@ function CartDrawer({ open, setOpen }) {
   return (
     <div className={`fixed inset-0 z-50 ${open ? "pointer-events-auto" : "pointer-events-none"}`}>
       <div
-        className={`absolute inset-0 bg-black/40 transition ${open ? "opacity-100" : "opacity-0"}`}
+        className={`absolute inset-0 bg-black/40 transition duration-300 ease-out ${open ? "opacity-100" : "opacity-0"}`}
         onClick={() => setOpen(false)}
       />
       <aside
-        className={`absolute right-0 top-0 h-full w-full max-w-md bg-white p-5 transition-transform duration-300 ${
+        className={`absolute right-0 top-0 h-full w-full max-w-md bg-white p-5 transition-transform duration-300 ease-out ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -32,9 +33,24 @@ function CartDrawer({ open, setOpen }) {
         </div>
 
         <div className="max-h-[58vh] space-y-4 overflow-auto pr-2">
+          {items.length === 0 && (
+            <div className="space-y-3 py-6 text-center">
+              <p className="text-xs uppercase tracking-[0.2em] text-zinc-500">Your cart is empty</p>
+              <Link to="/products" onClick={() => setOpen(false)} className="text-xs uppercase tracking-[0.2em] underline">
+                Browse Fits
+              </Link>
+            </div>
+          )}
           {items.map((item) => (
-            <div key={item.id} className="grid grid-cols-[80px_1fr] gap-3 border-b border-zinc-100 pb-3">
-              <img src={item.product.images?.[0]?.url} alt={item.product.name} className="h-20 w-20 object-cover" />
+            <div key={item.id} className="grid grid-cols-[80px_1fr] gap-3 border-b border-zinc-100 pb-3 transition duration-300 hover:bg-zinc-50/60">
+              <Link to={`/products/${item.product.slug || item.product.id}`} onClick={() => setOpen(false)}>
+                <img
+                  src={getDisplayProductImages(item.product)[0].url}
+                  alt={item.product.name}
+                  className="h-20 w-20 rounded-sm object-cover transition duration-300 hover:scale-[1.03]"
+                  loading="lazy"
+                />
+              </Link>
               <div className="space-y-2">
                 <p className="text-xs uppercase tracking-[0.14em]">{item.product.name}</p>
                 <p className="text-sm">{currency(item.product.price)}</p>
